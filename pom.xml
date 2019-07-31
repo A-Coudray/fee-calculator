@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.flat.ws</groupId>
+  <artifactId>fee-calculator</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>fee-calculator</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies>
+  
+	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-api</artifactId>
+	    <version>2.11.1</version>
+	</dependency>
+  	<dependency>
+	    <groupId>org.apache.logging.log4j</groupId>
+	    <artifactId>log4j-core</artifactId>
+	    <version>2.11.1</version>
+  	</dependency>
+  
+	<dependency>
+	   <groupId>org.rapidoid</groupId>
+	   <artifactId>rapidoid-quick</artifactId>
+	   <version>5.5.5</version>
+	</dependency>
+	<dependency>
+		<groupId>org.junit.jupiter</groupId>
+		<artifactId>junit-jupiter-engine</artifactId>
+		<version>5.2.0</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>javax.ws.rs</groupId>
+		<artifactId>javax.ws.rs-api</artifactId>
+		<version>2.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.core</groupId>
+		<artifactId>jersey-client</artifactId>
+		<version>2.27</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.27</version>
+			<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.inject</groupId>
+		<artifactId>jersey-hk2</artifactId>
+		<version>2.27</version>
+		<scope>test</scope>
+		<exclusions>
+			<exclusion>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+			</exclusion>
+		</exclusions>
+</dependency>
+	
+	<dependency>
+		<groupId>org.junit.platform</groupId>
+		<artifactId>junit-platform-runner</artifactId>
+		<version>1.2.0</version>
+		<scope>test</scope>
+	</dependency>
+  </dependencies>
+  
+    
+  	<build>
+  	
+	  <plugins>
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-shade-plugin</artifactId>
+		    <executions>
+		        <execution>
+		            <goals>
+		                <goal>shade</goal>
+		            </goals>
+		            <configuration>
+		                <shadedArtifactAttached>true</shadedArtifactAttached>
+		                <transformers>
+		                    <transformer implementation=
+		                      "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+		                        <mainClass>com.flat.ws.fee_calculator.FeeCaclculatorServer</mainClass>
+		                </transformer>
+		            </transformers>
+		        </configuration>
+		        </execution>
+		    </executions>
+		</plugin>
+	</plugins>
+</build>
+</project>
