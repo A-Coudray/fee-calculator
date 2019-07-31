@@ -5,7 +5,7 @@ public class FeeCalculatorProcessor {
 	
 	
 	
-	public int calculateMembershipFee(String id) {
+	public int calculateMembershipFee(int rent, String rentPeriod, String organizationUnit) {
 		
 		return 1;
 	}

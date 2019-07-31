@@ -1,0 +1,13 @@
+{
+	"branches": [
+		{
+			"name": "client_a",
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		}
+
+	]
+
+}
