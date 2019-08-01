@@ -16,6 +16,8 @@ public class Division {
 
 	private HashMap <String, Area> areasObject;
 	
+	private Client parent;
+	
 	public ArrayList<String> getAreas() {
 		return areas;
 	}
@@ -52,6 +54,14 @@ public class Division {
 
 	public void setAreasObject(HashMap <String, Area> areasObject) {
 		this.areasObject = areasObject;
+	}
+
+	public Client getParent() {
+		return parent;
+	}
+
+	public void setParent(Client parent) {
+		this.parent = parent;
 	}
 	
 }

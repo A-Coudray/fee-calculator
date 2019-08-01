@@ -15,6 +15,8 @@ public class Area{
 	
 	private HashMap <String, Branch> branchesObject;
 	
+	private Division parent;
+	
 	
 	public ArrayList<String> getBranches() {
 		return branches;
@@ -55,5 +57,13 @@ public class Area{
 
 	public void setBranchesObject(HashMap <String, Branch> branchesObject) {
 		this.branchesObject = branchesObject;
+	}
+
+	public Division getParent() {
+		return parent;
+	}
+
+	public void setParent(Division parent) {
+		this.parent = parent;
 	}
 }

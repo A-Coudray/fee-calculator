@@ -19,14 +19,20 @@ public class ConfigurationManager {
 	private static final String AREAS_CONFIG = "areas-config.json";
 	private static final String BRANCHES_CONFIG = "branches-config.json";
 
-	private HashMap<String, Client> clientsConfig = new HashMap<>();;
+	private Client clientConfig;
 
-	public HashMap<String, Client> getClientsConfig() {
-		return clientsConfig;
+	private HashMap<String, Branch> branchesMap;
+
+	private HashMap<String, Area> areasMap;
+
+	private HashMap<String, Division> divisionsMap;
+
+	public Client getClientConfig() {
+		return clientConfig;
 	}
 
-	public void setClientsConfig(HashMap<String, Client> clientsConfig) {
-		this.clientsConfig = clientsConfig;
+	public void setClientConfig(Client clientConfig) {
+		this.clientConfig = clientConfig;
 	}
 
 	/**
@@ -86,47 +92,68 @@ public class ConfigurationManager {
 		ArrayList<Division> divisions = new ArrayList<>();
 
 		for (Area area : jsonArea) {
-			HashMap<String, Branch> associatedBranches = new HashMap<>();
 			for (String br : area.getBranches()) {
 				for (Branch curBr : jsonBranch) {
 					if (null != br && br.equalsIgnoreCase(curBr.getName())) {
-						associatedBranches.put(br, curBr);
+						curBr.setParent(area);
+						if (null == branchesMap.putIfAbsent(br, curBr)) {
+							// throw
+						}
 					}
-
 				}
 			}
-			area.setBranchesObject(associatedBranches);
-			areas.add(area);
 		}
 
 		for (Division div : jsonDiv) {
-			HashMap<String, Area> associatedAreas = new HashMap<>();
 			for (String ar : div.getAreas()) {
 				for (Area curAr : areas) {
 					if (null != ar && ar.equalsIgnoreCase(curAr.getName())) {
-						associatedAreas.put(ar, curAr);
+						curAr.setParent(div);
+						if (null == areasMap.putIfAbsent(ar, curAr)) {
+							// throw
+						}
 					}
-
 				}
 			}
-			div.setAreasObject(associatedAreas);
-			divisions.add(div);
 		}
 
-		HashMap<String, Division> associatedDiv = new HashMap<>();
 
 		for (String div : jsonClient.getDivisions()) {
 			for (Division curDiv : divisions) {
 				if (null != div && div.equalsIgnoreCase(curDiv.getName())) {
-					associatedDiv.put(div, curDiv);
+					curDiv.setParent(jsonClient);
+					if (null == divisionsMap.putIfAbsent(div, curDiv)) {
+						// throw
+					}
 				}
 			}
 		}
-		jsonClient.setDivisionsObjects(associatedDiv);
-		clientsConfig.put(jsonClient.getName(), jsonClient);
+		this.setClientConfig(jsonClient);
 
-		clientsConfig.entrySet().stream().forEach(System.out::println);
+	}
 
+	public HashMap<String, Branch> getBranchesMap() {
+		return branchesMap;
+	}
+
+	public void setBranchesMap(HashMap<String, Branch> branchesMap) {
+		this.branchesMap = branchesMap;
+	}
+
+	public HashMap<String, Area> getAreasMap() {
+		return areasMap;
+	}
+
+	public void setAreasMap(HashMap<String, Area> areasMap) {
+		this.areasMap = areasMap;
+	}
+
+	public HashMap<String, Division> getDivisionsMap() {
+		return divisionsMap;
+	}
+
+	public void setDivisionsMap(HashMap<String, Division> divisionsMap) {
+		this.divisionsMap = divisionsMap;
 	}
 
 }

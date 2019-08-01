@@ -12,6 +12,8 @@ public class Branch {
 	private String name;
 	
 	private OrganizationUnitConfig config;
+	
+	private Area parent;
 
 	public String getName() {
 		return name;
@@ -27,6 +29,14 @@ public class Branch {
 
 	public void setConfig(OrganizationUnitConfig config) {
 		this.config = config;
+	}
+
+	public Area getParent() {
+		return parent;
+	}
+
+	public void setParent(Area parent) {
+		this.parent = parent;
 	}
 
 	
