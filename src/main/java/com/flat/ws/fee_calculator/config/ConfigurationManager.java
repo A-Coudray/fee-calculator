@@ -19,7 +19,7 @@ public class ConfigurationManager {
 	private static final String AREAS_CONFIG = "areas-config.json";
 	private static final String BRANCHES_CONFIG = "branches-config.json";
 
-	private HashMap<String, Client> clientsConfig  = new HashMap<>();;
+	private HashMap<String, Client> clientsConfig = new HashMap<>();;
 
 	public HashMap<String, Client> getClientsConfig() {
 		return clientsConfig;
@@ -71,21 +71,20 @@ public class ConfigurationManager {
 		}
 
 		Gson gson = new Gson();
-		Client[] jsonClient = gson.fromJson(bufferedReaderClient, Client[].class);
+		Client jsonClient = gson.fromJson(bufferedReaderClient, Client.class);
 
 		Division[] jsonDiv = gson.fromJson(bufferedReaderDivision, Division[].class);
 		Area[] jsonArea = gson.fromJson(bufferedReaderArea, Area[].class);
 		Branch[] jsonBranch = gson.fromJson(bufferedReaderBranch, Branch[].class);
 
-		System.out.println(jsonClient[0].toString());
+		System.out.println(jsonClient.toString());
 		System.out.println(jsonDiv[0].toString());
 		System.out.println(jsonArea[0].toString());
 		System.out.println(jsonBranch[0].toString());
-		
-		
-		ArrayList<Area> areas = new ArrayList<> ();
-		ArrayList<Division> divisions = new ArrayList<> ();
-		
+
+		ArrayList<Area> areas = new ArrayList<>();
+		ArrayList<Division> divisions = new ArrayList<>();
+
 		for (Area area : jsonArea) {
 			HashMap<String, Branch> associatedBranches = new HashMap<>();
 			for (String br : area.getBranches()) {
@@ -114,21 +113,18 @@ public class ConfigurationManager {
 			divisions.add(div);
 		}
 
-		
-		for (Client cli : jsonClient) {
-			HashMap<String, Division> associatedDiv = new HashMap<>();
+		HashMap<String, Division> associatedDiv = new HashMap<>();
 
-			for (String div : cli.getDivisions()) {
-				for (Division curDiv : divisions) {
-					if (null != div && div.equalsIgnoreCase(curDiv.getName())) {
-						associatedDiv.put(div, curDiv);
-					}
+		for (String div : jsonClient.getDivisions()) {
+			for (Division curDiv : divisions) {
+				if (null != div && div.equalsIgnoreCase(curDiv.getName())) {
+					associatedDiv.put(div, curDiv);
 				}
 			}
-			cli.setDivisionsObjects(associatedDiv);
-			clientsConfig.put(cli.getName(), cli);
-
 		}
+		jsonClient.setDivisionsObjects(associatedDiv);
+		clientsConfig.put(jsonClient.getName(), jsonClient);
+
 		clientsConfig.entrySet().stream().forEach(System.out::println);
 
 	}
