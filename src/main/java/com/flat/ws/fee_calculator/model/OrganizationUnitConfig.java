@@ -2,6 +2,12 @@ package com.flat.ws.fee_calculator.model;
 
 public class OrganizationUnitConfig {
 	
+	@Override
+	public String toString() {
+		return "OrganizationUnitConfig [hasFixedMembershipFee=" + hasFixedMembershipFee
+				+ ", fixed_membership_fee_amount=" + fixed_membership_fee_amount + "]";
+	}
+
 	private boolean hasFixedMembershipFee;
 	
 	private int fixed_membership_fee_amount;
