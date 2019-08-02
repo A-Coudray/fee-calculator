@@ -12,7 +12,22 @@
 				"has_fixed_membership_fee": false,
 				"fixed_membership_fee_amount": 0
 			}
+		},
+		{
+			"name": "branch_c",
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		},
+		{
+			"name": "branch_d",
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
 		}
+		
 
 ]
 

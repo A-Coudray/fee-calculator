@@ -85,9 +85,12 @@ public class ConfigurationManager {
 		branchesMap = new HashMap<>();
 		areasMap = new HashMap<>();
 		divisionsMap = new HashMap<>();
+		
+		ArrayList<String> assignedOrganizationUnit = new ArrayList<>();
 
 		for (Area area : jsonArea) {
 			for (String br : area.getBranches()) {
+				assignedOrganizationUnit.add(br);
 				for (Branch curBr : jsonBranch) {
 					if (null != br && br.equalsIgnoreCase(curBr.getName())) {
 						curBr.setParent(area);
@@ -98,8 +101,9 @@ public class ConfigurationManager {
 				}
 			}
 		}
+		validateAssignedOrganizationUnits(assignedOrganizationUnit, branchesMap);
 
-		ArrayList<String> assignedOrganizationUnit = new ArrayList<>();
+		assignedOrganizationUnit = new ArrayList<>();
 
 		for (Division div : jsonDiv) {
 			for (String ar : div.getAreas()) {
