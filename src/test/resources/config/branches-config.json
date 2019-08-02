@@ -1,16 +1,13 @@
 [
-
 		{
-			"name": "area_a",
-			"branches": ["branch_a", "branch_b"],
+			"name": "branch_a",
 			"config": {
 				"has_fixed_membership_fee": false,
 				"fixed_membership_fee_amount": 0
 			}
 		},
 		{
-			"name": "area_b",
-			"branches": ["branch_a", "branch_d"],
+			"name": "branch_b",
 			"config": {
 				"has_fixed_membership_fee": false,
 				"fixed_membership_fee_amount": 0
@@ -18,3 +15,4 @@
 		}
 
 ]
+

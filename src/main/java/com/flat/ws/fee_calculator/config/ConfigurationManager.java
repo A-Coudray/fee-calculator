@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.flat.ws.fee_calculator.exception.FeeCalculatorException;
 import com.flat.ws.fee_calculator.model.Area;
 import com.flat.ws.fee_calculator.model.Branch;
 import com.flat.ws.fee_calculator.model.Client;
@@ -21,11 +22,11 @@ public class ConfigurationManager {
 
 	private Client clientConfig;
 
-	private HashMap<String, Branch> branchesMap;
+	private HashMap<String, Branch> branchesMap = new HashMap<>();
 
-	private HashMap<String, Area> areasMap;
+	private HashMap<String, Area> areasMap = new HashMap<>();;
 
-	private HashMap<String, Division> divisionsMap;
+	private HashMap<String, Division> divisionsMap = new HashMap<>();;
 
 	public Client getClientConfig() {
 		return clientConfig;
@@ -59,21 +60,19 @@ public class ConfigurationManager {
 		return LoaderConfigurationManager.instance;
 	}
 
-	public void loadConfiguration() {
+	public void loadConfiguration(String path) throws FeeCalculatorException {
 
-		String confiPathg = "src/main/resources/config/";
 		BufferedReader bufferedReaderClient = null;
 		BufferedReader bufferedReaderDivision = null;
 		BufferedReader bufferedReaderArea = null;
 		BufferedReader bufferedReaderBranch = null;
 		try {
-			bufferedReaderClient = new BufferedReader(new FileReader(confiPathg + CLIENTS_CONFIG));
-			bufferedReaderDivision = new BufferedReader(new FileReader(confiPathg + DIVISIONS_CONFIG));
-			bufferedReaderArea = new BufferedReader(new FileReader(confiPathg + AREAS_CONFIG));
-			bufferedReaderBranch = new BufferedReader(new FileReader(confiPathg + BRANCHES_CONFIG));
+			bufferedReaderClient = new BufferedReader(new FileReader(path + CLIENTS_CONFIG));
+			bufferedReaderDivision = new BufferedReader(new FileReader(path + DIVISIONS_CONFIG));
+			bufferedReaderArea = new BufferedReader(new FileReader(path + AREAS_CONFIG));
+			bufferedReaderBranch = new BufferedReader(new FileReader(path + BRANCHES_CONFIG));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FeeCalculatorException(e.getMessage(), e);
 		}
 
 		Gson gson = new Gson();
@@ -83,53 +82,69 @@ public class ConfigurationManager {
 		Area[] jsonArea = gson.fromJson(bufferedReaderArea, Area[].class);
 		Branch[] jsonBranch = gson.fromJson(bufferedReaderBranch, Branch[].class);
 
-		System.out.println(jsonClient.toString());
-		System.out.println(jsonDiv[0].toString());
-		System.out.println(jsonArea[0].toString());
-		System.out.println(jsonBranch[0].toString());
-
-		ArrayList<Area> areas = new ArrayList<>();
-		ArrayList<Division> divisions = new ArrayList<>();
+		branchesMap = new HashMap<>();
+		areasMap = new HashMap<>();
+		divisionsMap = new HashMap<>();
 
 		for (Area area : jsonArea) {
 			for (String br : area.getBranches()) {
 				for (Branch curBr : jsonBranch) {
 					if (null != br && br.equalsIgnoreCase(curBr.getName())) {
 						curBr.setParent(area);
-						if (null == branchesMap.putIfAbsent(br, curBr)) {
-							// throw
+						if (null != branchesMap.putIfAbsent(br, curBr)) {
+							throw new FeeCalculatorException(ErrorMessages.INVALID_AREA_CONFIG_EXCEPTION + curBr);
 						}
 					}
 				}
 			}
 		}
+
+		ArrayList<String> assignedOrganizationUnit = new ArrayList<>();
 
 		for (Division div : jsonDiv) {
 			for (String ar : div.getAreas()) {
-				for (Area curAr : areas) {
+				assignedOrganizationUnit.add(ar);
+				for (Area curAr : jsonArea) {
 					if (null != ar && ar.equalsIgnoreCase(curAr.getName())) {
 						curAr.setParent(div);
-						if (null == areasMap.putIfAbsent(ar, curAr)) {
-							// throw
+						if (null != areasMap.putIfAbsent(ar, curAr)) {
+							throw new FeeCalculatorException(ErrorMessages.INVALID_DIVISION_CONFIG_EXCEPTION + curAr);
 						}
 					}
 				}
 			}
 		}
 
+		validateAssignedOrganizationUnits(assignedOrganizationUnit, areasMap);
+
+		assignedOrganizationUnit = new ArrayList<>();
 
 		for (String div : jsonClient.getDivisions()) {
-			for (Division curDiv : divisions) {
+			assignedOrganizationUnit.add(div);
+			for (Division curDiv : jsonDiv) {
 				if (null != div && div.equalsIgnoreCase(curDiv.getName())) {
 					curDiv.setParent(jsonClient);
-					if (null == divisionsMap.putIfAbsent(div, curDiv)) {
-						// throw
+					if (null != divisionsMap.putIfAbsent(div, curDiv)) {
+						throw new FeeCalculatorException(ErrorMessages.UNEXPECTED_EXCEPTION_IN_CLIENT_CONFIG);
 					}
 				}
 			}
 		}
+		validateAssignedOrganizationUnits(assignedOrganizationUnit, divisionsMap);
 		this.setClientConfig(jsonClient);
 
+	}
+
+	/*
+	 * This method is to ensure that any configured children actually exists in the
+	 * configuration
+	 */
+	private void validateAssignedOrganizationUnits(ArrayList<String> assignedUnits, HashMap<String, ?> map) throws FeeCalculatorException {
+		for (String curUnit : assignedUnits) {
+			if (!map.containsKey(curUnit)) {
+				throw new FeeCalculatorException(ErrorMessages.UNCONFIGURED_ORGANIZATION_UNIT+curUnit);
+			}
+		}
 	}
 
 	public HashMap<String, Branch> getBranchesMap() {
