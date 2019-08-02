@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.flat.ws.fee_calculator.exception.FeeCalculatorException;
@@ -74,7 +75,10 @@ public class ConfigurationManager {
 		} catch (FileNotFoundException e) {
 			throw new FeeCalculatorException(e.getMessage(), e);
 		}
-
+		/*
+		 * Parse the json files containing the config
+		 */
+		
 		Gson gson = new Gson();
 		Client jsonClient = gson.fromJson(bufferedReaderClient, Client.class);
 
@@ -82,12 +86,19 @@ public class ConfigurationManager {
 		Area[] jsonArea = gson.fromJson(bufferedReaderArea, Area[].class);
 		Branch[] jsonBranch = gson.fromJson(bufferedReaderBranch, Branch[].class);
 
+		/*
+		 * Initialize the hashmaps that will contain the config
+		 */
 		branchesMap = new HashMap<>();
 		areasMap = new HashMap<>();
 		divisionsMap = new HashMap<>();
-		
+
 		ArrayList<String> assignedOrganizationUnit = new ArrayList<>();
 
+		/*
+		 * Populate the hashmaps
+		 */
+		
 		for (Area area : jsonArea) {
 			for (String br : area.getBranches()) {
 				assignedOrganizationUnit.add(br);
@@ -101,7 +112,15 @@ public class ConfigurationManager {
 				}
 			}
 		}
+		
+		/*
+		 * Validate that the assigned units are actually configured
+		 */
 		validateAssignedOrganizationUnits(assignedOrganizationUnit, branchesMap);
+		/*
+		 * Validate that the configured units are actually assigned
+		 */
+		validateIfBranchesAreAssigned(jsonArea, jsonBranch);
 
 		assignedOrganizationUnit = new ArrayList<>();
 
@@ -120,6 +139,7 @@ public class ConfigurationManager {
 		}
 
 		validateAssignedOrganizationUnits(assignedOrganizationUnit, areasMap);
+		validateIfAreasAreAssigned(jsonDiv, jsonArea);
 
 		assignedOrganizationUnit = new ArrayList<>();
 
@@ -135,6 +155,7 @@ public class ConfigurationManager {
 			}
 		}
 		validateAssignedOrganizationUnits(assignedOrganizationUnit, divisionsMap);
+		validateIfDivisionsAreAssigned(jsonClient.getDivisions(), jsonDiv);
 		this.setClientConfig(jsonClient);
 
 	}
@@ -143,10 +164,89 @@ public class ConfigurationManager {
 	 * This method is to ensure that any configured children actually exists in the
 	 * configuration
 	 */
-	private void validateAssignedOrganizationUnits(ArrayList<String> assignedUnits, HashMap<String, ?> map) throws FeeCalculatorException {
+	private void validateAssignedOrganizationUnits(ArrayList<String> assignedUnits, HashMap<String, ?> map)
+			throws FeeCalculatorException {
 		for (String curUnit : assignedUnits) {
 			if (!map.containsKey(curUnit)) {
-				throw new FeeCalculatorException(ErrorMessages.UNCONFIGURED_ORGANIZATION_UNIT+curUnit);
+				throw new FeeCalculatorException(ErrorMessages.UNCONFIGURED_ORGANIZATION_UNIT + curUnit);
+			}
+		}
+	}
+
+	/*
+	 * method to validate that every division configured is actually assigned
+	 */
+	private void validateIfDivisionsAreAssigned(ArrayList<String> assignedUnits, Division[] configuredDiv)
+			throws FeeCalculatorException {
+
+		ArrayList<String> configuredUnitsNamesOnly = new ArrayList<>();
+		for (Division tmpDiv : configuredDiv) {
+			configuredUnitsNamesOnly.add(tmpDiv.getName());
+		}
+
+		for (String curUnit : configuredUnitsNamesOnly) {
+			if (!assignedUnits.contains(curUnit)) {
+				throw new FeeCalculatorException(ErrorMessages.UNASSIGNED_ORGANIZATION_UNIT + curUnit);
+			}
+		}
+	}
+	
+	
+	/*
+	 * Method to validate that every area configured is actually assigned
+	 */
+	
+	private void validateIfAreasAreAssigned(Division[] assignedAreas, Area[] configuredArea)
+			throws FeeCalculatorException {
+		
+		/*
+		 * Map the configured areas in the json file to an arrayList
+		 */
+
+		ArrayList<String> configuredUnitsNamesOnly = new ArrayList<>();
+		for (Area tmpArea : configuredArea) {
+			configuredUnitsNamesOnly.add(tmpArea.getName());
+		}
+		
+		/*
+		 * Map the assigned areas from the division json file to arrayList
+		 */
+		ArrayList<String> assignedUnitsNamesOnly = new ArrayList<>();
+		for (Division tmpDiv : assignedAreas) {
+			assignedUnitsNamesOnly.addAll(tmpDiv.getAreas());
+		}
+
+		/*
+		 * Check if all the configured ones are actually assigned
+		 */
+		for (String curUnit : configuredUnitsNamesOnly) {
+			if (!assignedUnitsNamesOnly.contains(curUnit)) {
+				throw new FeeCalculatorException(ErrorMessages.UNASSIGNED_ORGANIZATION_UNIT + curUnit);
+			}
+		}
+	}
+	
+	/*
+	 * Method to validate that every branch configured is actually assigned (very similar as upper one)
+	 */
+	
+	private void validateIfBranchesAreAssigned(Area[] assignedBranches, Branch[] configuredBranch)
+			throws FeeCalculatorException {
+
+		
+		ArrayList<String> configuredUnitsNamesOnly = new ArrayList<>();
+		for (Branch tmpBranch : configuredBranch) {
+			configuredUnitsNamesOnly.add(tmpBranch.getName());
+		}
+		
+		ArrayList<String> assignedUnitsNamesOnly = new ArrayList<>();
+		for (Area tmpDiv : assignedBranches) {
+			assignedUnitsNamesOnly.addAll(tmpDiv.getBranches());
+		}
+
+		for (String curUnit : configuredUnitsNamesOnly) {
+			if (!assignedUnitsNamesOnly.contains(curUnit)) {
+				throw new FeeCalculatorException(ErrorMessages.UNASSIGNED_ORGANIZATION_UNIT + curUnit);
 			}
 		}
 	}

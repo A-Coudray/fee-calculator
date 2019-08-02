@@ -1,22 +1,22 @@
 [
-
 		{
-			"name": "division_a",
-			"areas": ["area_a", "area_b"],
+			"name": "branch_a",
 			"config": {
 				"has_fixed_membership_fee": false,
 				"fixed_membership_fee_amount": 0
 			}
 		},
-		
-		
 		{
-			"name": "division_b",
-			"areas": ["area_c"],
+			"name": "branch_b",
 			"config": {
 				"has_fixed_membership_fee": true,
-				"fixed_membership_fee_amount": 4500000
-			}
+				"fixed_membership_fee_amount": 30000
 		}
+		},
+		{
+			"name": "branch_c"
+		}
+		
 
 ]
+

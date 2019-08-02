@@ -27,8 +27,6 @@ public class FeeCalculatorProcessor {
 		// avoid case sensitive errors
 		rentPeriod = rentPeriod.toLowerCase();
 		
-		System.out.println(rentPeriod);
-		
 		validateRent(rent, rentPeriod);
 
 		// find the branch
@@ -56,11 +54,12 @@ public class FeeCalculatorProcessor {
 				throw new FeeCalculatorException(ErrorMessages.NO_ORGANIZATION_CONFIG_UNIT_FOUND+organizationUnit, HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			} else {
 
-				if (config.isHasFixedMembershipFee()) {
+				if (config.getHas_fixed_membership_fee()) {
+					
 					return config.getFixed_membership_fee_amount();
 				} else {
 
-					res = calculateMembershipFee(rent, rentPeriod);
+					res = calculation(rent, rentPeriod);
 
 					return validateMembershipFee(res);
 				}
@@ -102,7 +101,7 @@ public class FeeCalculatorProcessor {
 
 	}
 
-	private int calculateMembershipFee(int rent, String rentPeriod) throws FeeCalculatorException {
+	private int calculation(int rent, String rentPeriod) throws FeeCalculatorException {
 
 
 		switch (rentPeriod) {

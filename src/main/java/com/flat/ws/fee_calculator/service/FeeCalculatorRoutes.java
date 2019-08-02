@@ -10,6 +10,7 @@ import org.rapidoid.http.Resp;
 
 import com.flat.ws.fee_calculator.exception.FeeCalculatorException;
 import com.flat.ws.fee_calculator.model.FeeCalculatorInput;
+import com.flat.ws.fee_calculator.model.FeeCalculatorOutput;
 
 @Controller
 public class FeeCalculatorRoutes {
@@ -33,8 +34,10 @@ public class FeeCalculatorRoutes {
 		try {
 			int res = processor.calculateMembershipFee(input.getRent(), input.getRent_period(),
 					input.getOrganization_unit());
+			FeeCalculatorOutput output = new FeeCalculatorOutput(input.getRent(), input.getRent_period(),
+					input.getOrganization_unit(), res);
 			resp.code(HttpStatus.SC_OK);
-			resp.result(res);
+			resp.result(output);
 		} catch (FeeCalculatorException e) {
 			if (e.getStatus() != 0 ) {
 				resp.code(e.getStatus());

@@ -18,6 +18,8 @@ public final class ErrorMessages {
 	public static final String NO_ORGANIZATION_CONFIG_UNIT_FOUND = "Error: not Organization Unit Config could be found for: ";
 	
 	public static final String UNCONFIGURED_ORGANIZATION_UNIT = "Error: the following Organization Unit has not been configured ";
+	
+	public static final String UNASSIGNED_ORGANIZATION_UNIT = "Error: the following Organization Unit has not been assigned ";
 
 	public static final String INVALID_AREA_CONFIG_EXCEPTION = "Error: a branch can only have one assigned area. Duplicated branch declaration: ";
 	

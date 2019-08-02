@@ -60,6 +60,35 @@ public class ConfigurationManagerTest {
 	}
 	
 	@Test
+	public void loadInvalidConfigUnassigneddDivision () throws FeeCalculatorException {
+		
+		ConfigurationManager configMan = ConfigurationManager.getInstance();
+	    assertThrows(FeeCalculatorException.class, () -> {
+	    	configMan.loadConfiguration("src/test/resources/config/unassignedDivision/");
+	    });
+		
+	}
+	@Test
+	public void loadInvalidConfigUnassignedArea () throws FeeCalculatorException {
+		
+		ConfigurationManager configMan = ConfigurationManager.getInstance();
+	    assertThrows(FeeCalculatorException.class, () -> {
+	    	configMan.loadConfiguration("src/test/resources/config/unassignedArea/");
+	    });
+		
+	}
+	
+	@Test
+	public void loadInvalidConfigUnassignedBranch () throws FeeCalculatorException {
+		
+		ConfigurationManager configMan = ConfigurationManager.getInstance();
+	    assertThrows(FeeCalculatorException.class, () -> {
+	    	configMan.loadConfiguration("src/test/resources/config/unassignedBranch/");
+	    });
+		
+	}
+	
+	@Test
 	public void fileNotFound () throws FeeCalculatorException {
 		
 		ConfigurationManager configMan = ConfigurationManager.getInstance();

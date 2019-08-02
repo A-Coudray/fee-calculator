@@ -57,8 +57,6 @@ public class FeeCalculatorServer {
 			System.exit(1);
 		}
 		
-		
-
 		App.bootstrap(new String[0]);
 
 	}

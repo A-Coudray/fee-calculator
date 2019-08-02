@@ -4,20 +4,20 @@ public class OrganizationUnitConfig {
 	
 	@Override
 	public String toString() {
-		return "OrganizationUnitConfig [hasFixedMembershipFee=" + hasFixedMembershipFee
+		return "OrganizationUnitConfig [hasFixedMembershipFee=" + has_fixed_membership_fee
 				+ ", fixed_membership_fee_amount=" + fixed_membership_fee_amount + "]";
 	}
 
-	private boolean hasFixedMembershipFee;
+	private boolean has_fixed_membership_fee;
 	
 	private int fixed_membership_fee_amount;
 
-	public boolean isHasFixedMembershipFee() {
-		return hasFixedMembershipFee;
+	public boolean getHas_fixed_membership_fee() {
+		return has_fixed_membership_fee;
 	}
 
-	public void setHasFixedMembershipFee(boolean hasFixedMembershipFee) {
-		this.hasFixedMembershipFee = hasFixedMembershipFee;
+	public void setHas_fixed_membership_fee(boolean hasFixedMembershipFee) {
+		this.has_fixed_membership_fee = hasFixedMembershipFee;
 	}
 
 	public int getFixed_membership_fee_amount() {
