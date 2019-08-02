@@ -21,9 +21,9 @@ import com.flat.ws.fee_calculator.service.FeeCalculatorRoutes;
  * @author acoudray
  *
  */
-public class FeeCaclculatorServer {
+public class FeeCalculatorServer {
 
-	private static final Logger LOGGER = LogManager.getLogger(FeeCaclculatorServer.class.getName());
+	private static final Logger LOGGER = LogManager.getLogger(FeeCalculatorServer.class.getName());
 
 	public static void main(String[] args) {
 
