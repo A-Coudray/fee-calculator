@@ -13,7 +13,7 @@ public final class ErrorMessages {
 	
 	public static final String INVALID_ORGANIZATION_UNIT = "Error: this Organization Unit does not exist";
 	
-	public static final String INVALID_RENT_PERIOD = "Error: this rent period is not supported, ony \"weekly\" or \"monthly\" rent periods are supported";
+	public static final String INVALID_RENT_PERIOD = "Error: this rent period is not supported, only \"week\" or \"month\" rent periods are supported";
 	
 	public static final String NO_ORGANIZATION_CONFIG_UNIT_FOUND = "Error: not Organization Unit Config could be found for: ";
 	

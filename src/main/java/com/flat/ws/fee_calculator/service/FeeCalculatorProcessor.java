@@ -27,6 +27,8 @@ public class FeeCalculatorProcessor {
 		// avoid case sensitive errors
 		rentPeriod = rentPeriod.toLowerCase();
 		
+		System.out.println(rentPeriod);
+		
 		validateRent(rent, rentPeriod);
 
 		// find the branch
@@ -78,7 +80,10 @@ public class FeeCalculatorProcessor {
 			else if (rent > Constants.MAX_RENT_MONTHLY) {
 				throw new FeeCalculatorException(ErrorMessages.INVALID_RENT_MAX_MONTHLY, HttpStatus.SC_BAD_REQUEST);
 			}
-			;
+			else {
+				break;
+			}
+			
 		case Constants.WEEK:
 			if (rent < Constants.MIN_RENT_WEEKLY || rent > Constants.MAX_RENT_WEEKLY) {
 				throw new FeeCalculatorException(ErrorMessages.INVALID_RENT_MIN_WEEKLY, HttpStatus.SC_BAD_REQUEST);
@@ -86,7 +91,9 @@ public class FeeCalculatorProcessor {
 			else if (rent > Constants.MAX_RENT_WEEKLY) {
 				throw new FeeCalculatorException(ErrorMessages.INVALID_RENT_MAX_WEEKLY, HttpStatus.SC_BAD_REQUEST);
 			}
-			;
+			else {
+				break;
+			}
 
 		default:
 			throw new FeeCalculatorException(ErrorMessages.INVALID_RENT_PERIOD, HttpStatus.SC_BAD_REQUEST);

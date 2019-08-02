@@ -26,7 +26,7 @@ public class FeeCalculatorRoutes {
 	 */
 
 	@POST("/membership/fee")
-	public Resp createAccount(FeeCalculatorInput input, Req req) {
+	public Resp calculateMembershipFee(FeeCalculatorInput input, Req req) {
 
 		Resp resp = req.response();
 

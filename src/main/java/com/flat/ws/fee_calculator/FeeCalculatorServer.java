@@ -56,8 +56,10 @@ public class FeeCalculatorServer {
 			LOGGER.error(ErrorMessages.STARTUP_EXCEPTION, e);
 			System.exit(1);
 		}
+		
+		
 
-		App.bootstrap(args);
+		App.bootstrap(new String[0]);
 
 	}
 
