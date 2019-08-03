@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 public class ConfigurationManager {
 
-	private static final String CLIENTS_CONFIG = "clients-config.json";
+	private static final String CLIENTS_CONFIG = "client-config.json";
 	private static final String DIVISIONS_CONFIG = "divisions-config.json";
 	private static final String AREAS_CONFIG = "areas-config.json";
 	private static final String BRANCHES_CONFIG = "branches-config.json";

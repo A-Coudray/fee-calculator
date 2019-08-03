@@ -23,6 +23,8 @@ Now you need to properly configure the app, according to your needs. There are 4
 - branches-config.json
 
 
+
+
 Example for client-config
 
 		{
@@ -63,33 +65,141 @@ Example for divisions
 
 ]
 
+Example for areas
+
+
+
+	[
+		{
+			"name": "area_a",
+			"branches": ["branch_a", "branch_b"],
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		},
+		{
+			"name": "area_b",
+			"branches": ["branch_c"],
+			"config": {
+				"has_fixed_membership_fee": true,
+				"fixed_membership_fee_amount": 500000
+			}
+		},
+		{
+			"name": "area_c",
+			"branches": ["branch_d"]
+		}
+
+	]
+
+Example for branches
+
+	[
+		{
+			"name": "branch_a",
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		},
+		{
+			"name": "branch_b",
+			"config": {
+				"has_fixed_membership_fee": true,
+				"fixed_membership_fee_amount": 30000
+		}
+		},
+		{
+			"name": "branch_c"
+		},
+		{
+			"name": "branch_d"
+		}
+		
+
+	]
+
+	
+There are rules to follow:
+
+- The client must be unique
+- The client can have divisions
+- There can be several divisions
+- Divisions can have areas
+- There can several areas
+- The areas can have several branches
+- There can several branches
+
+This is basically a tree, the root being the client, its leaves are divisions, then areas and finally branches.
+
+I have aslo added verifications on the tree :
+- Each division/area/branch assiged in a parent must also be configured
+- Each division/area/branch must be assigned.
+	
+	
+
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Simply run `mvn test` or `mvn clean install` if you want to rebuild it.
 
-### Break down into end to end tests
+## Running the program
 
-Explain what these tests test and why
+Once the configuration completed, and the .jar file built, you can run the app with the following command :
 
-```
-Give an example
-```
+`java -jar fee-calculator-0.0.1-shaded.jar --conf [path to config files]`
 
-### And coding style tests
+With the --conf option being the path to your configuration files (relative or absolute).
+If you don't set any --conf parameter, the app will search in the `conf` folder at the root of the project.
 
-Explain what these tests test and why
 
-```
-Give an example
-```
+## Using the program
 
-## Deployment
+This app only offers a single API, that returns the membership fee based on the rent, the rent period and the associated branch.
 
-Add additional notes about how to deploy this on a live system
+The exposed API is POST http://localhost:8080/membership/fee
 
-## Built With
+Input example:
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+	{
+		"rent" : 13000,
+		"rent_period" : "week",
+		"organization_unit" : "branch_a"
+	}
+
+The rent value is in ***pence***.
+
+The output is as follow : 
+
+	{
+		"rent": 13000,
+		"rent_period": "week",
+		"organization_unit": "branch_a",
+		"membershipFee": 15600
+	}
+
+The membership fee value is also in ***pence***.
+
+You can find a post man format request that you can import at the root of the project.
+
+You can also use this curl request : 
+
+	curl -X POST \
+	  http://localhost:8080/membership/fee \
+	  -H 'Accept: application/json' \
+	  -H 'Cache-Control: no-cache' \
+	  -H 'Connection: keep-alive' \
+	  -H 'Content-Type: application/json' \
+	  -H 'Host: localhost:8080' \
+	  -H 'accept-encoding: gzip, deflate' \
+	  -H 'cache-control: no-cache' \
+	  -d '{
+		"rent": 13000,
+		"rent_period": "week",
+		"organization_unit": "branch_a"
+	}'
+
+
+
+

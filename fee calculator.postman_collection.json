@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "730cd033-6bb3-4980-ba8c-eede4b710e69",
+		"name": "fee calculator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/membership/fee",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"rent\" : 13000,\n\t\"rent_period\" : \"week\",\n\t\"organization_unit\" : \"branch_a\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/membership/fee",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"membership",
+						"fee"
+					]
+				},
+				"description": "Get the membership fee"
+			},
+			"response": []
+		}
+	]
+}
