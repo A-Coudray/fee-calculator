@@ -4,7 +4,7 @@
 
   <groupId>com.flat.ws</groupId>
   <artifactId>fee-calculator</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
 
   <name>fee-calculator</name>
@@ -96,6 +96,11 @@
   	<build>
   	
 	  <plugins>
+	  
+	    <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.0</version>
+        </plugin>
 		<plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-shade-plugin</artifactId>

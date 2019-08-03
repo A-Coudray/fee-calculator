@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import com.flat.ws.fee_calculator.config.Constants;
@@ -44,6 +44,14 @@ public class FeeCalculatorApiTest {
 		FeeCalculatorServer.main(args);
 
 	}
+	
+	@AfterAll
+	public static void cleanUp() {
+
+		FeeCalculatorServer.shutdown();
+
+	}
+	
 	
 	
 	@Test

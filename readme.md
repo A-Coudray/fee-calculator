@@ -1,36 +1,68 @@
-# Project Title
+# Fee Calculator
 
-One Paragraph of project description goes here
+This is a small java program, offering an API to calculate the monthly membership rate of flatbond for a tenant.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+To run this program, download it directly from the git repo, or just clone it.
+The following are required to make it run :
+- Maven 3
+- Java JDK 8 (I have been using jdk1.8.0_202 to make this app)
+- [Optional] Postman to send a few test requests.
+- and that's it !
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+Provided you have Maven installed, just run the classic `mvn clean install` at the root of the project.
 
-Say what the step will be
+Now you need to properly configure the app, according to your needs. There are 4 files to configure :
+- client-config.json
+- divisions-config.json
+- areas-config.json
+- branches-config.json
 
-```
-Give the example
-```
 
-And repeat
+Example for client-config
 
-```
-until finished
-```
+		{
+			"name": "client_a",
+			"divisions": ["division_a", "division_b"],
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		}
 
-End with an example of getting some data out of the system or using it for a little demo
+Every config file has a name, and a config object. This config object can be used to set a specific value for the membership fee. However, 
+whatever is configured in the configuration, the child's config object will always override it. 
+If you whish to use the configuration of the parent, leave the config field empty.
+		
+Example for divisions
+
+[
+
+		{
+			"name": "division_a",
+			"areas": ["area_a", "area_b"],
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		},
+		
+		
+		{
+			"name": "division_b",
+			"areas": ["area_c"],
+			"config": {
+				"has_fixed_membership_fee": true,
+				"fixed_membership_fee_amount": 4500000
+			}
+		}
+
+]
+
 
 ## Running the tests
 

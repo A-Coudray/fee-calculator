@@ -1,0 +1,13 @@
+
+
+		{
+			"name": "client_a",
+			"divisions": ["division_a", "division_b"],
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		}
+
+
+

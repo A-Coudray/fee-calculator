@@ -1,0 +1,22 @@
+[
+
+		{
+			"name": "division_a",
+			"areas": ["area_a", "area_b"],
+			"config": {
+				"has_fixed_membership_fee": false,
+				"fixed_membership_fee_amount": 0
+			}
+		},
+		
+		
+		{
+			"name": "division_b",
+			"areas": ["area_c"],
+			"config": {
+				"has_fixed_membership_fee": true,
+				"fixed_membership_fee_amount": 4500000
+			}
+		}
+
+]
