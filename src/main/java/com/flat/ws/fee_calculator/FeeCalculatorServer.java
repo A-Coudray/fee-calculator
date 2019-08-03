@@ -46,8 +46,8 @@ public class FeeCalculatorServer {
 		}
 
 		catch (ParseException exp) {
-			// oops, something went wrong
-			System.err.println("Parsing failed.  Reason: " + exp.getMessage());
+			LOGGER.error("Commande line parsing failed :"+exp.getMessage());
+			System.exit(1);
 		}
 		ConfigurationManager configMan = ConfigurationManager.getInstance();
 		try {

@@ -81,7 +81,6 @@ public class ConfigurationManager {
 		
 		Gson gson = new Gson();
 		Client jsonClient = gson.fromJson(bufferedReaderClient, Client.class);
-
 		Division[] jsonDiv = gson.fromJson(bufferedReaderDivision, Division[].class);
 		Area[] jsonArea = gson.fromJson(bufferedReaderArea, Area[].class);
 		Branch[] jsonBranch = gson.fromJson(bufferedReaderBranch, Branch[].class);
@@ -99,12 +98,19 @@ public class ConfigurationManager {
 		 * Populate the hashmaps
 		 */
 		
+		// for each area configured
 		for (Area area : jsonArea) {
+			// we go through every configured branch
 			for (String br : area.getBranches()) {
+				// and add them to this assignedOrganizationUnit (that means a parent has them assigned to)
 				assignedOrganizationUnit.add(br);
+				// then we check the actual configured branches
 				for (Branch curBr : jsonBranch) {
+					// if we have a match, we add the branch to the map containing all branches
 					if (null != br && br.equalsIgnoreCase(curBr.getName())) {
+						// we also set the branch's parent to easily find it after
 						curBr.setParent(area);
+						// we make sure that the branch has not been assigned twice
 						if (null != branchesMap.putIfAbsent(br, curBr)) {
 							throw new FeeCalculatorException(ErrorMessages.INVALID_AREA_CONFIG_EXCEPTION + curBr);
 						}
@@ -199,26 +205,26 @@ public class ConfigurationManager {
 	private void validateIfAreasAreAssigned(Division[] assignedAreas, Area[] configuredArea)
 			throws FeeCalculatorException {
 		
-		/*
-		 * Map the configured areas in the json file to an arrayList
-		 */
+		
+		// Map the configured areas in the json file to an arrayList
+		 
 
 		ArrayList<String> configuredUnitsNamesOnly = new ArrayList<>();
 		for (Area tmpArea : configuredArea) {
 			configuredUnitsNamesOnly.add(tmpArea.getName());
 		}
 		
-		/*
-		 * Map the assigned areas from the division json file to arrayList
-		 */
+		
+		// Map the assigned areas from the division json file to arrayList
+		
 		ArrayList<String> assignedUnitsNamesOnly = new ArrayList<>();
 		for (Division tmpDiv : assignedAreas) {
 			assignedUnitsNamesOnly.addAll(tmpDiv.getAreas());
 		}
 
-		/*
-		 * Check if all the configured ones are actually assigned
-		 */
+		
+		// Check if all the configured ones are actually assigned
+
 		for (String curUnit : configuredUnitsNamesOnly) {
 			if (!assignedUnitsNamesOnly.contains(curUnit)) {
 				throw new FeeCalculatorException(ErrorMessages.UNASSIGNED_ORGANIZATION_UNIT + curUnit);

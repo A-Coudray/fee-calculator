@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 
 import com.flat.ws.fee_calculator.config.Constants;
+import com.flat.ws.fee_calculator.config.ErrorMessages;
 import com.flat.ws.fee_calculator.model.FeeCalculatorInput;
 import com.flat.ws.fee_calculator.model.FeeCalculatorOutput;
 
@@ -84,6 +85,23 @@ public class FeeCalculatorApiTest {
 	}
 	
 	@Test
+	public void getMinimumMemberShipFeeWeekhTest () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_a");
+		input.setRent(11500);
+		input.setRent_period("week");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Successful membership calculation", 200, resp.getStatus());
+		
+		FeeCalculatorOutput responseAcc = resp.readEntity(FeeCalculatorOutput.class);
+		
+		assertEquals("Successful membership calculation", responseAcc.getMembershipFee(), Constants.MIN_MEMBERSHIP_MONTHLY_PLUS_VAT);
+		
+	}
+	
+	@Test
 	public void getMemberShipFeeMonthFixedAmountTest () {
 		FeeCalculatorInput input = new FeeCalculatorInput();
 		
@@ -139,6 +157,108 @@ public class FeeCalculatorApiTest {
 		assertEquals("Successful membership calculation", responseAcc.getMembershipFee(), expected);
 		
 	}
+	
+	@Test
+	public void invalidRentPeriodTest () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_d");
+		input.setRent(21000);
+		input.setRent_period("12345");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Bad request", 400, resp.getStatus());
+		
+
+		String message = resp.readEntity(String.class);
+		
+		
+		message = message.replace("\\", "");
+		
+		assertTrue("Correct error message",message.contains(ErrorMessages.INVALID_RENT_PERIOD) );
+		
+	}
+	
+	@Test
+	public void invalidMinimumRentWeeklyTest () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_a");
+		input.setRent(1);
+		input.setRent_period("week");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Bad request", 400, resp.getStatus());
+		
+		String message = resp.readEntity(String.class);
+		
+		
+		message = message.replace("\\", "");
+		
+		assertTrue("Correct error message",message.contains(ErrorMessages.INVALID_RENT_MIN_WEEKLY) );
+		
+	}
+	
+	@Test
+	public void invalidMinimumRentWeeklyMonthly () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_a");
+		input.setRent(50);
+		input.setRent_period("month");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Bad request", 400, resp.getStatus());
+		
+		String message = resp.readEntity(String.class);
+		
+		
+		message = message.replace("\\", "");
+		
+		assertTrue("Correct error message",message.contains(ErrorMessages.INVALID_RENT_MIN_MONTHLY) );
+		
+	}
+	
+	@Test
+	public void invalidMaxRentWeeklyTest () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_a");
+		input.setRent(300000);
+		input.setRent_period("week");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Bad request", 400, resp.getStatus());
+		
+		String message = resp.readEntity(String.class);
+		
+		
+		message = message.replace("\\", "");
+		
+		assertTrue("Correct error message",message.contains(ErrorMessages.INVALID_RENT_MAX_WEEKLY) );
+		
+	}
+	
+	@Test
+	public void invalidMaxRentWeeklyMonthly () {
+		FeeCalculatorInput input = new FeeCalculatorInput();
+		
+		input.setOrganization_unit("branch_a");
+		input.setRent(966000);
+		input.setRent_period("month");
+		Response resp = sendPostRequest(input);
+		
+		assertEquals("Bad request", 400, resp.getStatus());
+		
+		String message = resp.readEntity(String.class);
+		
+		
+		message = message.replace("\\", "");
+		
+		assertTrue("Correct error message",message.contains(ErrorMessages.INVALID_RENT_MAX_MONTHLY) );
+		
+	}
+	
 	
 	
 	

@@ -30,6 +30,9 @@ public final class ErrorMessages {
 	
 	public static final String STARTUP_EXCEPTION = "Exception while processing the configuration files, shutting down the fee calculator app";
 	
+	public static final String UNEXPECTED_EXCEPTION = "An unexpected error occured while calculation the membership fee";
+	
+	
 	
 	  private ErrorMessages(){
 		    //this prevents even the native class from 

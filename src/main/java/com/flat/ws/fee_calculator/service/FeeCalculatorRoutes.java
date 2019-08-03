@@ -8,6 +8,7 @@ import org.rapidoid.annotation.POST;
 import org.rapidoid.http.Req;
 import org.rapidoid.http.Resp;
 
+import com.flat.ws.fee_calculator.config.ErrorMessages;
 import com.flat.ws.fee_calculator.exception.FeeCalculatorException;
 import com.flat.ws.fee_calculator.model.FeeCalculatorInput;
 import com.flat.ws.fee_calculator.model.FeeCalculatorOutput;
@@ -47,6 +48,14 @@ public class FeeCalculatorRoutes {
 			}
 			resp.result(e.getMessage());
 			LOGGER.error(e.getMessage(), e);
+		}
+		/*
+		 * Catch unexpected exception
+		 */
+		catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			resp.code(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			resp.result(ErrorMessages.UNEXPECTED_EXCEPTION);
 		}
 		return resp;
 
