@@ -3,6 +3,11 @@ package com.flat.ws.fee_calculator.model;
 
 public class FeeCalculatorOutput {
 	
+	@Override
+	public String toString() {
+		return "FeeCalculatorOutput [rent=" + rent + ", rent_period=" + rent_period + ", organization_unit="
+				+ organization_unit + ", membershipFee=" + membershipFee + "]";
+	}
 	private int rent;
 	private String rent_period ;
 	private String organization_unit;

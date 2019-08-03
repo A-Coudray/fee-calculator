@@ -39,6 +39,7 @@ public class FeeCalculatorRoutes {
 					input.getOrganization_unit(), res);
 			resp.code(HttpStatus.SC_OK);
 			resp.result(output);
+			LOGGER.info("Membership fee calculated: " +output.toString());
 		} catch (FeeCalculatorException e) {
 			if (e.getStatus() != 0 ) {
 				resp.code(e.getStatus());
